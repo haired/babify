@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,10 @@ namespace Babify.Services
     {
         private readonly IMongoCollection<Song> songCollection;
 
-        public SongService()
+        public SongService(IConfiguration config)
         {
-            var client = new MongoClient("mongodb+srv://haired:Franciscaine22$@cluster0.fhsf1.azure.mongodb.net/babify?retryWrites=true&w=majority");
+            string connectionString = config.GetValue<string>("connectionString");
+            var client = new MongoClient(connectionString);
             var database = client.GetDatabase("babify");
             songCollection = database.GetCollection<Song>("songs");
         }
